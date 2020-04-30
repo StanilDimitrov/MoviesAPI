@@ -1,11 +1,13 @@
 ﻿using EntityFrameworkPaginate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Dal.Data.Models;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,8 +41,20 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult<MovieDetailsResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to GetMovieDetailsAsync.");
-            var response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
-            return response;
+
+            try
+            {
+                return await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unexpected exception occured:", ex);
+                throw;
+            }
         }
 
         // POST: api/Movies
@@ -58,7 +72,20 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult> UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to UpdateMovieAsync.");
-            await _movieStore.UpdateMovieAsync(id, request, cancellationToken);
+            try
+            {
+                await _movieStore.UpdateMovieAsync(id, request, cancellationToken);
+            }
+            catch (NotFoundException ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unexpected exception occured:", ex);
+                throw;
+            }
 
             return Ok();
         }
@@ -68,7 +95,21 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult> DeleteMovieAsync(int id, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to DeleteMovieAsync.");
-            await _movieStore.DeleteMovieAsync(id, cancellationToken);
+            try
+            {
+                await _movieStore.DeleteMovieAsync(id, cancellationToken);
+
+            }
+            catch (NotFoundException ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Unexpected exception occured:", ex);
+                throw;
+            }
 
             return Ok();
         }

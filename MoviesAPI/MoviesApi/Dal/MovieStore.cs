@@ -1,11 +1,11 @@
 ﻿using EntityFrameworkPaginate;
 using Microsoft.EntityFrameworkCore;
+using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Dal.Data.Models;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,15 +25,7 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
           
-            var movie = await _context
-                .MovieItems
-                .FirstOrDefaultAsync(x => x.Title == movieModel.Title, cancellationToken);
-
-            if (movie == null)
-            {
-                movie = new Movie() { Title = movieModel.Title, Description = movieModel.Description, ReleaseDate = movieModel.ReleaseDate };
-
-            }
+            var movie = new Movie() { Title = movieModel.Title, Description = movieModel.Description, ReleaseDate = movieModel.ReleaseDate };
 
             _context.MovieItems.Add(movie);
             await _context.SaveChangesAsync(cancellationToken);
@@ -45,11 +37,11 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var movie = await _context.MovieItems.FindAsync(id);
+            var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (movie == null)
             {
-                throw new ArgumentException($"Cannot update movie with Id: {id}.");
+                throw new NotFoundException($"Movie with Id: {id} does not exist.");
             }
 
             SetMovieProperties(movie, request);
@@ -64,7 +56,7 @@ namespace MoviesApi.Dal
 
             if (movie == null)
             {
-                throw new ArgumentException($"Cannot delete movie with Id: {id}.");
+                throw new NotFoundException($"Movie with Id: {id} does not exist.");
             }
 
             _context.MovieItems.Remove(movie);
@@ -79,7 +71,7 @@ namespace MoviesApi.Dal
 
             if (movie == null)
             {
-                throw new ArgumentException($"Cannot get movie details for id: {id}.");
+                throw new NotFoundException($"Movie with Id: {id} does not exist.");
             }
 
             var movieDetails = new MovieDetailsResponseModel()
@@ -108,13 +100,13 @@ namespace MoviesApi.Dal
             var filters = new Filters<Movie>();
             foreach (var filter in requestFilters)
             {
-                if (filter.FieldName == "Title")
+                if (filter.Field == "Title")
                 {
                     filters.Add(!string.IsNullOrEmpty(filter.Value), x => x.Title.Contains(filter.Value));
                 }
-                if (filter.FieldName == "ReleaseDate")
+                if (filter.Field == "ReleaseDate")
                 {
-                    filters.Add(!string.IsNullOrEmpty(filter.Value), x => x.ReleaseDate.Equals(filter.Value));
+                    filters.Add(!string.IsNullOrEmpty(filter.Value), x => x.ReleaseDate.Year.ToString().Equals(filter.Value));
                 }
             }
             
@@ -124,9 +116,10 @@ namespace MoviesApi.Dal
         private Sorts<Movie> ApplySorting(SortModel requestSort)
         {
             var sorts = new Sorts<Movie>();
-            sorts.Add(requestSort.SortBy == 1, x => x.Id);
-            sorts.Add(requestSort.SortBy == 2, x => x.Title);
-            sorts.Add(requestSort.SortBy == 3, x => x.ReleaseDate);
+            
+            sorts.Add(requestSort.Field == "Id", x => x.Id);
+            sorts.Add(requestSort.Field == "Title", x => x.Title);
+            sorts.Add(requestSort.Field == "ReleaseDate", x => x.ReleaseDate);
 
             return sorts;
         }

@@ -48,5 +48,71 @@ namespace MoviesApi.Dal
                 ReleaseDate = DateTime.Now
             };
         }
+
+        public static Movie TestMovie5()
+        {
+            return new Movie
+            {
+                Id = 5,
+                Title = "TestMovie5",
+                Description = "TestDescription5",
+                ReleaseDate = DateTime.Now.AddYears(-2)
+            };
+        }
+
+        public static Movie TestMovie6()
+        {
+            return new Movie
+            {
+                Id = 6,
+                Title = "TestMovie6",
+                Description = "TestDescription6",
+                ReleaseDate = DateTime.Now.AddYears(-1)
+            };
+        }
+
+        public static Movie TestMovie7()
+        {
+            return new Movie
+            {
+                Id = 7,
+                Title = "TestMovie7",
+                Description = "TestDescription7",
+                ReleaseDate = DateTime.Now.AddYears(-1)
+            };
+        }
+
+        public static Movie TestMovie8()
+        {
+            return new Movie
+            {
+                Id = 8,
+                Title = "TestMovie8",
+                Description = "TestDescription8",
+                ReleaseDate = DateTime.Now.AddYears(-1)
+            };
+        }
+
+        public static Movie TestMovie9()
+        {
+            return new Movie
+            {
+                Id = 9,
+                Title = "TestMovie9",
+                Description = "TestDescription9",
+                ReleaseDate = DateTime.Now.AddYears(-1)
+            };
+        }
+
+        public static Movie TestMovie10()
+        {
+            return new Movie
+            {
+                Id = 10,
+                Title = "TestMovie10",
+                Description = "TestDescription10",
+                ReleaseDate = DateTime.Now.AddYears(-1)
+            };
+        }
     }
 }

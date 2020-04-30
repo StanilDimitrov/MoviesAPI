@@ -4,7 +4,7 @@ namespace MoviesApi.Models.Query
 {
     public class FilterModel
     {
-        public string FieldName { get; set; }
+        public string Field { get; set; }
 
         public string Value { get; set; }
     }

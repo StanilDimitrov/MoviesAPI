@@ -25,7 +25,13 @@ namespace MoviesApi.Dal
                     DataSeedHelper.TestMovie1(),
                     DataSeedHelper.TestMovie2(),
                     DataSeedHelper.TestMovie3(),
-                    DataSeedHelper.TestMovie4()
+                    DataSeedHelper.TestMovie4(),
+                    DataSeedHelper.TestMovie5(),
+                    DataSeedHelper.TestMovie6(),
+                    DataSeedHelper.TestMovie7(),
+                    DataSeedHelper.TestMovie8(),
+                    DataSeedHelper.TestMovie9(),
+                    DataSeedHelper.TestMovie10()
                 };
 
                 context.MovieItems.AddRange(movies);

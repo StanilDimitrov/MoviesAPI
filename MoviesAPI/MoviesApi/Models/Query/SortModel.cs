@@ -2,8 +2,8 @@
 {
     public class SortModel
     {
-        public bool Direction { get; set; }
+        public bool IsDescending { get; set; }
 
-        public int SortBy { get; set; }
+        public string Field { get; set; }
     }
 }
