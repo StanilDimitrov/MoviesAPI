@@ -79,7 +79,7 @@ namespace MoviesApi.Dal
                 throw new NotFoundException($"Movie with Id: {id} does not exist.");
             }
 
-            var movieDetails = new MovieDetailsResponseModel()
+            var movieDetails = new MovieDetailsResponseModel
             {
                 Id = movie.Id,
                 Title = movie.Title,
@@ -93,7 +93,8 @@ namespace MoviesApi.Dal
         /// <inheritdoc />
         public async Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.MovieItems.Select(x => new MovieGridResponseModel
+            var query = _context.MovieItems.Select(
+                x => new MovieGridResponseModel
             {
                 Id = x.Id,
                 Title = x.Title,
