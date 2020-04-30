@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
@@ -17,11 +18,13 @@ namespace MoviesApi.Controllers
     {
         private readonly IMovieStore _movieStore;
         private readonly ILogger<MoviesController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger)
+        public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger, IMemoryCache cache )
         {
             _movieStore = movieStore;
             _logger = logger;
+            _cache = cache;
         }
 
         // GET: api/Movies/
@@ -36,11 +39,12 @@ namespace MoviesApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDetailsResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Call made to GetMovieDetailsAsync.");
+            _logger.LogInformation("Call made to G" +
+                "etMovieDetailsAsync.");
 
             try
             {
-                return await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
+                return await SetGetMemoryCache(id, cancellationToken);
             }
             catch (NotFoundException ex)
             {
@@ -60,7 +64,9 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult<int>> CreateMovieAsync(MovieCreateRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to CreateMovieAsync.");
-            return await _movieStore.CreateMovieAsync(request, cancellationToken);
+            var response = await _movieStore.CreateMovieAsync(request, cancellationToken);
+
+            return response;
         }
 
         // PUT: api/Movies/5
@@ -108,6 +114,30 @@ namespace MoviesApi.Controllers
             }
 
             return Ok();
+        }
+
+        private async Task<MovieDetailsResponseModel> SetGetMemoryCache(int id, CancellationToken cancellationToken)
+        {
+            //2
+            string key = "MyMemoryKey-Cache";
+            MovieDetailsResponseModel response;
+            //If the data is present in cache the 
+            //Condition will be true else it is false 
+            if (!_cache.TryGetValue(key, out response))
+            {
+                //4.fetch the data from the object
+                response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
+                //5.Save the received data in cache
+                _cache.Set(key, response,
+                    new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(3)));
+            }
+            else
+            {
+                response = _cache.Get(key) as MovieDetailsResponseModel;
+                
+            }
+            return response;
         }
 
     }

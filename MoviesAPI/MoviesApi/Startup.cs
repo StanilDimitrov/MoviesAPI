@@ -24,6 +24,7 @@ namespace MoviesApi
             services.AddDbContext<MovieContext>(opt =>
               opt.UseInMemoryDatabase("MovieList"));
             services.AddControllers();
+            services.AddMemoryCache();
 
             // Add application services.
             services.AddScoped<IMovieStore, MovieStore>();
