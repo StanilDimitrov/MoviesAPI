@@ -2,7 +2,6 @@
 using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Dal.Data.Models;
-using MoviesApi.Dal.Mappers;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
