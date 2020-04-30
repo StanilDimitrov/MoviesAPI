@@ -11,7 +11,7 @@ Simple web api application allows adding, updating, deleting and reading of movi
 
   - HttpGet["api/movies/{id}"] GetMovieDetailsAsync
 
-  - HttpPost["api/movies"] GetMovieGridAsync
+  - HttpGet["api/movies"] GetMovieGridAsync
 
   - HttpPut["api/movies/{id}"] UpdateMovieAsync
 
