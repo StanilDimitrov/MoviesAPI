@@ -27,7 +27,7 @@ namespace MoviesApi.Controllers
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
-        // GET: api/Movies/
+        // GET: api/Movies
         [HttpGet]
         public async Task<ActionResult<QueryResult<MovieGridResponseModel>>> GetMovieGridAsync(BasicQuery query, CancellationToken cancellationToken)
         { 
@@ -44,7 +44,7 @@ namespace MoviesApi.Controllers
 
             try
             {
-                return await SetGetMemoryCache(id, cancellationToken);
+                return await CacheDetailsResponse(id, cancellationToken);
             }
             catch (NotFoundException ex)
             {
@@ -116,28 +116,16 @@ namespace MoviesApi.Controllers
             return Ok();
         }
 
-        private async Task<MovieDetailsResponseModel> SetGetMemoryCache(int id, CancellationToken cancellationToken)
+        private async Task<MovieDetailsResponseModel> CacheDetailsResponse(int id, CancellationToken cancellationToken)
         {
-            //2
-            string key = "MyMemoryKey-Cache";
-            MovieDetailsResponseModel response;
-            //If the data is present in cache the 
-            //Condition will be true else it is false 
-            if (!_cache.TryGetValue(key, out response))
+            var cashedResponse = await _cache.GetOrCreateAsync<MovieDetailsResponseModel>("DetailsResponse", async (cacheEntry) =>
             {
-                //4.fetch the data from the object
-                response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
-                //5.Save the received data in cache
-                _cache.Set(key, response,
-                    new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(1)));
-            }
-            else
-            {
-                response = _cache.Get(key) as MovieDetailsResponseModel;
-                
-            }
-            return response;
+                cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                var response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
+                return response;
+            });
+
+            return cashedResponse;
         }
     }
 }
