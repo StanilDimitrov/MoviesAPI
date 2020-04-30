@@ -1,6 +1,4 @@
-﻿using EntityFrameworkPaginate;
-using MoviesApi.Dal.Data.Models;
-using MoviesApi.Models.Movies.Request;
+﻿using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
 using System.Threading;
@@ -18,7 +16,7 @@ namespace MoviesApi.Dal.Contracts
 
         Task<MovieDetailsResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken);
 
-        Page<Movie> GetMovieGridAsync(BasicQuery query);
+        Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken);
 
     }
 }

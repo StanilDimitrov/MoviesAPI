@@ -1,9 +1,7 @@
-﻿using EntityFrameworkPaginate;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
-using MoviesApi.Dal.Data.Models;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
@@ -26,14 +24,12 @@ namespace MoviesApi.Controllers
             _logger = logger;
         }
 
-        // GET: api/Movies
+        // GET: api/Movies/
         [HttpGet]
-        public ActionResult<Page<Movie>> GetMovieGrid(BasicQuery query)
-        {
+        public async Task<ActionResult<QueryResult<MovieGridResponseModel>>> GetMovieGridAsync(BasicQuery query, CancellationToken cancellationToken)
+        { 
             _logger.LogInformation("Call made to GetMovieGrid.");
-            var data = _movieStore.GetMovieGridAsync(query);
-
-            return data;
+            return await _movieStore.GetMovieGridAsync(query, cancellationToken);
         }
 
         // GET: api/Movies/5

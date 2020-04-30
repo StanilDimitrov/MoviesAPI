@@ -1,9 +1,4 @@
-﻿using EntityFrameworkPaginate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MoviesApi.Models.Query
 {
@@ -14,6 +9,5 @@ namespace MoviesApi.Models.Query
         public SortModel Sort { get; set; }
 
         public IEnumerable<FilterModel> Filters { get; set; }
-
     }
 }

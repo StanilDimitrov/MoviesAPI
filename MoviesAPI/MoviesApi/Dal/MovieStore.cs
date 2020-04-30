@@ -1,12 +1,13 @@
-﻿using EntityFrameworkPaginate;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Dal.Data.Models;
+using MoviesApi.Dal.Mappers;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -85,43 +86,87 @@ namespace MoviesApi.Dal
             return movieDetails;
         }
 
-        public Page<Movie> GetMovieGridAsync(BasicQuery query)
+        public async Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
-            var filters = ApplyFilters(query.Filters);
-            var sorts = ApplySorting(query.Sort);
-
-            var data = _context.MovieItems.Paginate(query.Paging.CurrentPage, query.Paging.PageSize, sorts, filters);
+            var query = _context.MovieItems.Select(x => new MovieGridResponseModel
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description,
+                ReleaseDate = x.ReleaseDate
+            }).AsQueryable();
             
-            return data;
+            query = ApplyFilters(request.Filters, query);
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            List<MovieGridResponseModel> data = new List<MovieGridResponseModel>();
+            query = ApplySorting(request.Sort, query);
+            query = ApplyPagination(request.Paging, query);
+            data = await query.ToListAsync(cancellationToken);
+
+            QueryResult<MovieGridResponseModel> queryResult = new QueryResult<MovieGridResponseModel> { TotalCount = totalCount, Data = data, TotalPages = totalCount / request.Paging.PageSize};
+            
+            return queryResult;
         }
 
-        private Filters<Movie> ApplyFilters(IEnumerable<FilterModel> requestFilters)
+        private IQueryable<MovieGridResponseModel> ApplyFilters(IEnumerable<FilterModel> requestFilters, IQueryable<MovieGridResponseModel> query)
         {
-            var filters = new Filters<Movie>();
             foreach (var filter in requestFilters)
             {
-                if (filter.Field == "Title")
+                if (filter.Field == "Title" && filter.Value != null)
                 {
-                    filters.Add(!string.IsNullOrEmpty(filter.Value), x => x.Title.Contains(filter.Value));
+                    query = query.Where(x => x.Title.ToLower().Contains(filter.Value.ToLower()));
                 }
-                if (filter.Field == "ReleaseDate")
+                if (filter.Field == "ReleaseDate" && filter.Value != null)
                 {
-                    filters.Add(!string.IsNullOrEmpty(filter.Value), x => x.ReleaseDate.Year.ToString().Equals(filter.Value));
+                    query = query.Where(x => x.ReleaseDate.Year.ToString().Equals(filter.Value));
                 }
             }
-            
-            return filters;
+
+            return query;
         }
 
-        private Sorts<Movie> ApplySorting(SortModel requestSort)
+        private IQueryable<MovieGridResponseModel> ApplySorting(SortModel sort, IQueryable<MovieGridResponseModel> query)
         {
-            var sorts = new Sorts<Movie>();
-            
-            sorts.Add(requestSort.Field == "Id", x => x.Id);
-            sorts.Add(requestSort.Field == "Title", x => x.Title);
-            sorts.Add(requestSort.Field == "ReleaseDate", x => x.ReleaseDate);
+            if (sort.IsDescending)
+            {
+                if (sort.Field == "Id")
+                {
+                    query = query.OrderByDescending(x => x.Id);
+                }
+                else if (sort.Field == "Title")
+                {
+                    query = query.OrderByDescending(x => x.Title);
+                }
+                else if (sort.Field == "ReleaseDate")
+                {
+                    query = query.OrderByDescending(x => x.ReleaseDate);
+                }
+            }
 
-            return sorts;
+            else 
+            {
+                if (sort.Field == "Id")
+                {
+                    query = query.OrderBy(x => x.Id);
+                }
+
+                else if (sort.Field == "Title")
+                {
+                    query = query.OrderBy(x => x.Title);
+                }
+                else if (sort.Field == "ReleaseDate")
+                {
+                    query = query.OrderBy(x => x.ReleaseDate);
+                }
+            }
+
+            return query;
+        }
+
+        private IQueryable<MovieGridResponseModel> ApplyPagination(PagingModel pageModel, IQueryable<MovieGridResponseModel> query)
+        {
+           return query.Skip((pageModel.CurrentPage - 1) * pageModel.PageSize).Take(pageModel.PageSize);
         }
 
         private void SetMovieProperties(Movie movie, MovieUpdateRequestModel requestModel)
