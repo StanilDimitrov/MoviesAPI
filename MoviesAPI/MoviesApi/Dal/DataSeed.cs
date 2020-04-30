@@ -20,7 +20,7 @@ namespace MoviesApi.Dal
                     return;   // Data was already seeded
                 }
 
-                var movies = new List<Movie>()
+                var movies = new List<Movie>
                 {
                     DataSeedHelper.TestMovie1(),
                     DataSeedHelper.TestMovie2(),

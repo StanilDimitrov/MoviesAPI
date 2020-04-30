@@ -22,9 +22,9 @@ namespace MoviesApi.Controllers
 
         public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger, IMemoryCache cache )
         {
-            _movieStore = movieStore;
-            _logger = logger;
-            _cache = cache;
+            _movieStore = movieStore ?? throw new ArgumentNullException(nameof(movieStore));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
         // GET: api/Movies/
@@ -130,7 +130,7 @@ namespace MoviesApi.Controllers
                 //5.Save the received data in cache
                 _cache.Set(key, response,
                     new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(3)));
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(1)));
             }
             else
             {
@@ -139,6 +139,5 @@ namespace MoviesApi.Controllers
             }
             return response;
         }
-
     }
 }

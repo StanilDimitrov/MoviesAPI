@@ -1,17 +1,18 @@
-﻿using Newtonsoft.Json;
-
-namespace MoviesApi.Models.Query
+﻿namespace MoviesApi.Models.Query
 {
     /// <summary>
-    /// Gets or sets the offset of the query.
+    /// Model for pagination.
     /// </summary>
-    /// <remarks>
-    /// This represent how many rows to skip from the result set.
-    /// </remarks>
     public class PagingModel
     {
+        /// <summary>
+        /// Gets or sets the current page.
+        /// </summary>
         public int CurrentPage { get; set; }
 
+        /// <summary>
+        /// Gets or sets the page size.
+        /// </summary>
         public int PageSize { get; set; }
     }
 }

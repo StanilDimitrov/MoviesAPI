@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace MoviesApi.Dal
 {
@@ -17,10 +18,11 @@ namespace MoviesApi.Dal
         private readonly MovieContext _context;
 
         public MovieStore(MovieContext context)
-        {
-            _context = context;
+        { 
+          _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc />
         public async Task<int> CreateMovieAsync(MovieCreateRequestModel movieModel, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -33,6 +35,7 @@ namespace MoviesApi.Dal
             return movie.Id;
         }
 
+        /// <inheritdoc />
         public async Task UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -48,6 +51,7 @@ namespace MoviesApi.Dal
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task DeleteMovieAsync(int id, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -63,6 +67,7 @@ namespace MoviesApi.Dal
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<MovieDetailsResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -85,6 +90,7 @@ namespace MoviesApi.Dal
             return movieDetails;
         }
 
+        /// <inheritdoc />
         public async Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
             var query = _context.MovieItems.Select(x => new MovieGridResponseModel
@@ -98,12 +104,16 @@ namespace MoviesApi.Dal
             query = ApplyFilters(request.Filters, query);
             var totalCount = await query.CountAsync(cancellationToken);
 
-            List<MovieGridResponseModel> data = new List<MovieGridResponseModel>();
             query = ApplySorting(request.Sort, query);
             query = ApplyPagination(request.Paging, query);
-            data = await query.ToListAsync(cancellationToken);
+            var data = await query.ToListAsync(cancellationToken);
 
-            QueryResult<MovieGridResponseModel> queryResult = new QueryResult<MovieGridResponseModel> { TotalCount = totalCount, Data = data, TotalPages = totalCount / request.Paging.PageSize};
+            var queryResult = new QueryResult<MovieGridResponseModel> 
+            { 
+              TotalCount = totalCount,
+              Data = data,
+              TotalPages = totalCount / request.Paging.PageSize 
+            };
             
             return queryResult;
         }
@@ -112,11 +122,11 @@ namespace MoviesApi.Dal
         {
             foreach (var filter in requestFilters)
             {
-                if (filter.Field == "Title" && filter.Value != null)
+                if (filter.Field.ToLower() == EntityColumnNamesConstants.Title.ToLower() && filter.Value != null)
                 {
                     query = query.Where(x => x.Title.ToLower().Contains(filter.Value.ToLower()));
                 }
-                if (filter.Field == "ReleaseDate" && filter.Value != null)
+                if (filter.Field.ToLower() == EntityColumnNamesConstants.ReleaseDate.ToLower() && filter.Value != null)
                 {
                     query = query.Where(x => x.ReleaseDate.Year.ToString().Equals(filter.Value));
                 }
@@ -129,15 +139,15 @@ namespace MoviesApi.Dal
         {
             if (sort.IsDescending)
             {
-                if (sort.Field == "Id")
+                if (sort.Field.ToLower() == EntityColumnNamesConstants.Id.ToLower())
                 {
                     query = query.OrderByDescending(x => x.Id);
                 }
-                else if (sort.Field == "Title")
+                else if (sort.Field.ToLower() == EntityColumnNamesConstants.Title.ToLower())
                 {
                     query = query.OrderByDescending(x => x.Title);
                 }
-                else if (sort.Field == "ReleaseDate")
+                else if (sort.Field.ToLower() == EntityColumnNamesConstants.ReleaseDate.ToLower())
                 {
                     query = query.OrderByDescending(x => x.ReleaseDate);
                 }
@@ -145,16 +155,16 @@ namespace MoviesApi.Dal
 
             else 
             {
-                if (sort.Field == "Id")
+                if (sort.Field.ToLower() == EntityColumnNamesConstants.Id.ToLower())
                 {
                     query = query.OrderBy(x => x.Id);
                 }
 
-                else if (sort.Field == "Title")
+                else if (sort.Field.ToLower() == EntityColumnNamesConstants.Title.ToLower())
                 {
                     query = query.OrderBy(x => x.Title);
                 }
-                else if (sort.Field == "ReleaseDate")
+                else if (sort.Field.ToLower() == EntityColumnNamesConstants.ReleaseDate.ToLower())
                 {
                     query = query.OrderBy(x => x.ReleaseDate);
                 }
