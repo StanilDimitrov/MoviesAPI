@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MoviesApi.CustomExceptions;
+﻿using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Dal.Data.Models;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MoviesApi.Dal
 {
