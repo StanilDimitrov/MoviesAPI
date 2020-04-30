@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MoviesApi.Dal;
+using MoviesApi.Dal.Contracts;
 
 namespace MoviesApi
 {
@@ -23,6 +24,10 @@ namespace MoviesApi
             services.AddDbContext<MovieContext>(opt =>
               opt.UseInMemoryDatabase("MovieList"));
             services.AddControllers();
+
+            // Add application services.
+            services.AddScoped<IMovieStore, MovieStore>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
