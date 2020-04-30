@@ -4,7 +4,7 @@
 
 ### Project Purpose
 
-Simple web api application allows creating, reading, updating, deleting of movies.  
+Simple web api application allows creating, reading, updating and deleting of movies.  
 
 
 #### Endpoints
