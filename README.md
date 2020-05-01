@@ -9,7 +9,7 @@ Simple web api application which allows creating, reading, updating and deleting
 
 #### Endpoints
 
-  - HttpPost["api/movies/"] CreateMovieAsync
+  - HttpPost["api/movies"] CreateMovieAsync
   
   - HttpPut["api/movies/{id}"] UpdateMovieAsync
 
