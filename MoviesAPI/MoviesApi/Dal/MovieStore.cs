@@ -23,7 +23,7 @@ namespace MoviesApi.Dal
         }
 
         /// <inheritdoc />
-        public async Task<int> CreateMovieAsync(MovieCreateRequestModel movieModel, CancellationToken cancellationToken)
+        public async Task<int> CreateMovieAsync(MovieRequestModel movieModel, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
           
@@ -36,7 +36,7 @@ namespace MoviesApi.Dal
         }
 
         /// <inheritdoc />
-        public async Task UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken)
+        public async Task UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -68,7 +68,7 @@ namespace MoviesApi.Dal
         }
 
         /// <inheritdoc />
-        public async Task<MovieDetailsResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
+        public async Task<MovieResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -79,7 +79,7 @@ namespace MoviesApi.Dal
                 throw new NotFoundException($"Movie with Id: {id} does not exist.");
             }
 
-            var movieDetails = new MovieDetailsResponseModel
+            var movieDetails = new MovieResponseModel
             {
                 Id = movie.Id,
                 Title = movie.Title,
@@ -91,11 +91,11 @@ namespace MoviesApi.Dal
         }
 
         /// <inheritdoc />
-        public async Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
             var query = _context.MovieItems.Select(
-                x => new MovieGridResponseModel
-            {
+                x => new MovieResponseModel
+                {
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
@@ -109,7 +109,7 @@ namespace MoviesApi.Dal
             query = ApplyPagination(request.Paging, query);
             var data = await query.ToListAsync(cancellationToken);
 
-            var queryResult = new QueryResult<MovieGridResponseModel> 
+            var queryResult = new QueryResult<MovieResponseModel> 
             { 
               TotalCount = totalCount,
               Data = data,
@@ -119,7 +119,7 @@ namespace MoviesApi.Dal
             return queryResult;
         }
 
-        private IQueryable<MovieGridResponseModel> ApplyFilters(IEnumerable<FilterModel> requestFilters, IQueryable<MovieGridResponseModel> query)
+        private IQueryable<MovieResponseModel> ApplyFilters(IEnumerable<FilterModel> requestFilters, IQueryable<MovieResponseModel> query)
         {
             foreach (var filter in requestFilters)
             {
@@ -136,7 +136,7 @@ namespace MoviesApi.Dal
             return query;
         }
 
-        private IQueryable<MovieGridResponseModel> ApplySorting(SortModel sort, IQueryable<MovieGridResponseModel> query)
+        private IQueryable<MovieResponseModel> ApplySorting(SortModel sort, IQueryable<MovieResponseModel> query)
         {
             if (sort.IsDescending)
             {
@@ -174,12 +174,12 @@ namespace MoviesApi.Dal
             return query;
         }
 
-        private IQueryable<MovieGridResponseModel> ApplyPagination(PagingModel pageModel, IQueryable<MovieGridResponseModel> query)
+        private IQueryable<MovieResponseModel> ApplyPagination(PagingModel pageModel, IQueryable<MovieResponseModel> query)
         {
            return query.Skip((pageModel.CurrentPage - 1) * pageModel.PageSize).Take(pageModel.PageSize);
         }
 
-        private void SetMovieProperties(Movie movie, MovieUpdateRequestModel requestModel)
+        private void SetMovieProperties(Movie movie, MovieRequestModel requestModel)
         {
             movie.Title = requestModel.Title;
             movie.Description = requestModel.Description;

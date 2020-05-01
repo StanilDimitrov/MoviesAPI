@@ -2,7 +2,7 @@
 
 namespace MoviesApi.Models.Movies.Request
 {
-    public class MovieUpdateRequestModel
+    public class MovieRequestModel
     {
         public string Title { get; set; }
 

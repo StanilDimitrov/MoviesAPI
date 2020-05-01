@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MoviesApi.Models.Movies.Response
 {
-    public class MovieDetailsResponseModel
+    public class MovieResponseModel
     {
         public int Id { get; set; }
 

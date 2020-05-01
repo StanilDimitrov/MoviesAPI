@@ -13,8 +13,8 @@ namespace MoviesApi.Dal.Contracts
         /// </summary>
         /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The task</returns>
-        Task<int> CreateMovieAsync(MovieCreateRequestModel request, CancellationToken cancellationToken);
+        /// <returns>The movie unique identifier</returns>
+        Task<int> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Update movie asynchronously.
@@ -23,7 +23,7 @@ namespace MoviesApi.Dal.Contracts
         /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task</returns>
-        Task UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken);
+        Task UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Delete movie asynchronously.
@@ -38,8 +38,8 @@ namespace MoviesApi.Dal.Contracts
         /// </summary>
         /// <param name="id">The movie unique identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The movie details response model</returns>
-        Task<MovieDetailsResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken);
+        /// <returns>The movie response model</returns>
+        Task<MovieResponseModel> GetMovieDetailsAsync(int id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get movie grid asynchronously.
@@ -47,7 +47,7 @@ namespace MoviesApi.Dal.Contracts
         /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Query result instance containing total count, total page count and the result set.</returns>
-        Task<QueryResult<MovieGridResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken);
+        Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken);
 
     }
 }

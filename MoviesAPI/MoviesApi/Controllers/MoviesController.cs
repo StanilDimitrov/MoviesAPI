@@ -45,7 +45,7 @@ namespace MoviesApi.Controllers
         /// <returns>Query result instance containing total count, total page count and the result set.</returns>
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<QueryResult<MovieGridResponseModel>>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
+        public async Task<ActionResult<QueryResult<MovieResponseModel>>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to GetMovieGrid.");
             return await _movieStore.GetMovieGridAsync(request, cancellationToken);
@@ -59,7 +59,7 @@ namespace MoviesApi.Controllers
         /// <returns>Movie details response model</returns>
         // GET: api/Movies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovieDetailsResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<MovieResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to GetMovieDetailsAsync");
                
@@ -74,7 +74,7 @@ namespace MoviesApi.Controllers
         /// <returns>The new movie unique identifier</returns>
         // POST: api/Movies
         [HttpPost]
-        public async Task<ActionResult<int>> CreateMovieAsync(MovieCreateRequestModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to CreateMovieAsync.");
             return await _movieStore.CreateMovieAsync(request, cancellationToken);
@@ -88,7 +88,7 @@ namespace MoviesApi.Controllers
         /// /// <returns>The task</returns>
         // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to UpdateMovieAsync.");
 
@@ -112,9 +112,9 @@ namespace MoviesApi.Controllers
             return Ok();
         }
 
-        private async Task<MovieDetailsResponseModel> CacheDetailsResponse(int id, CancellationToken cancellationToken)
+        private async Task<MovieResponseModel> CacheDetailsResponse(int id, CancellationToken cancellationToken)
         {
-            var cashedResponse = await _cache.GetOrCreateAsync<MovieDetailsResponseModel>("DetailsResponse", async (cacheEntry) =>
+            var cashedResponse = await _cache.GetOrCreateAsync<MovieResponseModel>("DetailsResponse", async (cacheEntry) =>
             {
                 cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(1);
                 var response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
