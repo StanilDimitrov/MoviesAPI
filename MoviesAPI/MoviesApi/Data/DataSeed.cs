@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MoviesApi.Dal;
 using MoviesApi.Data.Models;
 using System;
 using System.Collections.Generic;

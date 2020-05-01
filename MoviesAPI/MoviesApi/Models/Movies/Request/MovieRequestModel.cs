@@ -24,10 +24,10 @@ namespace MoviesApi.Models.Movies.Request
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the release date.
+        /// Gets or sets the movie release date.
         /// </summary>
         /// <value>
-        /// The release date.
+        /// The movie release date.
         /// </value>
         public DateTime ReleaseDate { get; set; }
     }

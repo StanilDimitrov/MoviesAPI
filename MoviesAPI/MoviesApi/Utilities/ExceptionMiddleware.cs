@@ -37,6 +37,5 @@ namespace MoviesApi.Utilities
                 await context.Response.WriteAsync("Something went horribly wrong!");
             }
         }
-
     }
 }

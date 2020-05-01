@@ -70,7 +70,11 @@ namespace MoviesApi.Dal
                     ReleaseDate = x.ReleaseDate
                 }).AsQueryable();
 
-            query = ApplyFilters(request.Filters, query);
+            if (request.Filters != null)
+            {
+                query = ApplyFilters(request.Filters, query);
+            }
+           
             var totalCount = await query.CountAsync(cancellationToken);
 
             query = ApplySorting(request.Sort, query);
