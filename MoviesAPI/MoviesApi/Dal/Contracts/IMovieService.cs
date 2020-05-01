@@ -11,19 +11,19 @@ namespace MoviesApi.Dal.Contracts
         /// <summary>
         /// Create movie asynchronously.
         /// </summary>
-        /// <param name="requestModel">The request model.</param>
+        /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The movie unique identifier</returns>
-        Task<int> CreateMovieAsync(MovieRequestModel requestModel, CancellationToken cancellationToken);
+        Task<int> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Update movie asynchronously.
         /// </summary>
         /// <param name="id">The movie unique identifier.</param>
-        /// <param name="requestModel">The request model.</param>
+        /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task</returns>
-        Task UpdateMovieAsync(int id, MovieRequestModel requestModel, CancellationToken cancellationToken);
+        Task UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get movie grid asynchronously.

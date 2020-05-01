@@ -1,4 +1,4 @@
-﻿namespace MoviesApi.Dal
+﻿namespace MoviesApi.Constants
 {
     public static class EntityColumnNamesConstants
     {

@@ -11,6 +11,7 @@ using System.Linq;
 using System;
 using MoviesApi.Data.Models;
 using MoviesApi.Data;
+using MoviesApi.Constants;
 
 namespace MoviesApi.Dal
 {
@@ -28,7 +29,12 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
           
-            var movie = new Movie() { Title = movieModel.Title, Description = movieModel.Description, ReleaseDate = movieModel.ReleaseDate };
+            var movie = new Movie
+            { 
+                Title = movieModel.Title,
+                Description = movieModel.Description,
+                ReleaseDate = movieModel.ReleaseDate
+            };
 
             _context.MovieItems.Add(movie);
             await _context.SaveChangesAsync(cancellationToken);
@@ -45,7 +51,7 @@ namespace MoviesApi.Dal
 
             if (movie == null)
             {
-                throw new NotFoundException($"Movie with Id: {id} does not exist.");
+                throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
             }
 
             SetMovieProperties(movie, request);
@@ -90,7 +96,7 @@ namespace MoviesApi.Dal
 
             if (movie == null)
             {
-                throw new NotFoundException($"Movie with Id: {id} does not exist.");
+                throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
             }
 
             var movieDetails = new MovieResponseModel
@@ -113,7 +119,7 @@ namespace MoviesApi.Dal
 
             if (movie == null)
             {
-                throw new NotFoundException($"Movie with Id: {id} does not exist.");
+                throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
             }
 
             _context.MovieItems.Remove(movie);

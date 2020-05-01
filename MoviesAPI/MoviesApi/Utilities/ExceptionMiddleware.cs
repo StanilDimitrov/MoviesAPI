@@ -34,7 +34,7 @@ namespace MoviesApi.Utilities
             {
                 _logger.LogError($"Something went wrong: {ex}");
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; 
-                await context.Response.WriteAsync(ex.Message);
+                await context.Response.WriteAsync("Something went horribly wrong!");
             }
         }
 
