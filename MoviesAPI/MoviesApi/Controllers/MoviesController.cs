@@ -6,7 +6,6 @@ using MoviesApi.Dal.Contracts;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
-using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,8 +44,6 @@ namespace MoviesApi.Controllers
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>The new movie unique identifier</returns>
         // POST: api/Movies
-        [SwaggerResponse(StatusCodes.Status200OK)]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         public async Task<ActionResult<int>> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
         {
@@ -62,9 +59,6 @@ namespace MoviesApi.Controllers
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// /// <returns>The task</returns>
         // PUT: api/Movies/5
-        [SwaggerResponse(StatusCodes.Status200OK)]
-        [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken)
         {
@@ -81,8 +75,6 @@ namespace MoviesApi.Controllers
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Query result instance containing total count, total page count and the result set.</returns>
         // GET: api/Movies
-        [SwaggerResponse(StatusCodes.Status200OK)]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<ActionResult<QueryResult<MovieResponseModel>>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
@@ -98,9 +90,6 @@ namespace MoviesApi.Controllers
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Movie response model</returns>
         // GET: api/Movies/5
-        [SwaggerResponse(StatusCodes.Status200OK)]
-        [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
@@ -116,9 +105,6 @@ namespace MoviesApi.Controllers
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// /// <returns>The task</returns>
         // DELETE: api/Movies/5
-        [SwaggerResponse(StatusCodes.Status200OK)]
-        [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovieAsync(int id, CancellationToken cancellationToken)
         {
