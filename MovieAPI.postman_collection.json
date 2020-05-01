@@ -106,12 +106,12 @@
 			"response": []
 		},
 		{
-			"name": "DeleteMovie",
+			"name": "GetMovieDetails",
 			"request": {
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
 					"raw": "https://localhost:44305/api/movies/3",
@@ -130,12 +130,12 @@
 			"response": []
 		},
 		{
-			"name": "GetMovieDetails",
+			"name": "DeleteMovie",
 			"request": {
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "https://localhost:44305/api/movies/3",
