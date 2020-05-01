@@ -19,9 +19,6 @@ Simple web api application which allows creating, reading, updating and deleting
 
   - HttpDelete["api/movies/{id}"] DeleteMovieAsync
 
-The database used in the project is in-memory. At the same time the endpoints are implemented as async methods
-which provides the opportunity to easily replace it with а relational or non relational database.
-
 
 #### Technologies and other important information
 
