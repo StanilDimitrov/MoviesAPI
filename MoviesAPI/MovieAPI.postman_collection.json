@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "dc58ea79-f895-4635-ad6a-fce1267f8d45",
+		"name": "MovieAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateMovie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"NewTestMovieLast\",\n\t\"description\": \"NewTestMoviewDescriptionLast\",\n\t\"releaseDate\": \"2019-05-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44305/api/movies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44305",
+					"path": [
+						"api",
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateMovie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"UpdatedMovie4\",\n\t\"description\": \"Moview4UpdateDescription\",\n\t\"releaseDate\": \"2018-05-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44305/api/movies/3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44305",
+					"path": [
+						"api",
+						"movies",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMovieGrid",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"paging\": { \"currentPage\": 1, \"pageSize\": 5 },\r\n  \"filters\": [\r\n        { \"field\": \"Title\", \"value\": \"TestMovie\" },\r\n        { \"field\": \"ReleaseDate\", \"value\": \"2020\" }\r\n],\r\n  \"sort\": \r\n    { \"field\": \"title\", \"isDescending\": false }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44305/api/movies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44305",
+					"path": [
+						"api",
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMovieDetails",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44305/api/movies/3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44305",
+					"path": [
+						"api",
+						"movies",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteMovie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44305/api/movies/3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44305",
+					"path": [
+						"api",
+						"movies",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
