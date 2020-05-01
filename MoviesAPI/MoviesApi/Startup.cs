@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MoviesApi.Dal;
 using MoviesApi.Dal.Contracts;
+using MoviesApi.Data;
 using MoviesApi.Utilities.Extensions;
 
 namespace MoviesApi

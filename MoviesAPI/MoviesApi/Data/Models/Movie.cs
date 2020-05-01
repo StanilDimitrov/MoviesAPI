@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MoviesApi.Dal.Data.Models
+namespace MoviesApi.Data.Models
 {
     /// <summary>
     /// Entity model for Movie table

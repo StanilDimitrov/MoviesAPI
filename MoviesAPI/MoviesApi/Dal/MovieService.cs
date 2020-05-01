@@ -1,6 +1,5 @@
 ﻿using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
-using MoviesApi.Dal.Data.Models;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
 using MoviesApi.Models.Query;
@@ -10,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using MoviesApi.Data.Models;
+using MoviesApi.Data;
 
 namespace MoviesApi.Dal
 {

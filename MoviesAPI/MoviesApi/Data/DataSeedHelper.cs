@@ -1,7 +1,7 @@
-﻿using MoviesApi.Dal.Data.Models;
+﻿using MoviesApi.Data.Models;
 using System;
 
-namespace MoviesApi.Dal
+namespace MoviesApi.Data
 {
     public static class DataSeedHelper
     {

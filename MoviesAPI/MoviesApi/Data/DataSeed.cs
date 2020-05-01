@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MoviesApi.Dal.Data.Models;
+using MoviesApi.Dal;
+using MoviesApi.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MoviesApi.Dal
+namespace MoviesApi.Data
 {
     public static class DataSeed
     {
