@@ -9,13 +9,13 @@ Simple web api application which allows creating, reading, updating and deleting
 
 #### Endpoints
 
-  - HttpGet["api/movies/{id}"] GetMovieDetailsAsync
-
-  - HttpGet["api/movies"] GetMovieGridAsync
-
+  - HttpPost["api/movies/"] CreateMovieAsync
+  
   - HttpPut["api/movies/{id}"] UpdateMovieAsync
 
-  - HttpPost["api/movies/"] CreateMovieAsync
+  - HttpGet["api/movies"] GetMovieGridAsync
+  
+  - HttpGet["api/movies/{id}"] GetMovieDetailsAsync
 
   - HttpDelete["api/movies/{id}"] DeleteMovieAsync
 
