@@ -25,5 +25,5 @@ Simple web API application which provides CRUD operations for creating, reading,
 The General technologies used in the development of Movies Api are the following:
   - ASP.NET Core 3.1
   - Entity Framework Core to access database (used in-memory database)
-  - Used object caching for movie details response model
-  - Used GitHub advantages to work with branches during development ot features
+  - Object caching for movie details response model
+  - GitHub advantages to work with branches during development ot features
