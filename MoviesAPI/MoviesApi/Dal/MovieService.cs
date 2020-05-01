@@ -13,11 +13,11 @@ using System;
 
 namespace MoviesApi.Dal
 {
-    public class MovieStore: IMovieStore
+    public class MovieService: IMovieService
     {
         private readonly MovieContext _context;
 
-        public MovieStore(MovieContext context)
+        public MovieService(MovieContext context)
         { 
           _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -52,19 +52,32 @@ namespace MoviesApi.Dal
         }
 
         /// <inheritdoc />
-        public async Task DeleteMovieAsync(int id, CancellationToken cancellationToken)
+        public async Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            var query = _context.MovieItems.Select(
+                x => new MovieResponseModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    ReleaseDate = x.ReleaseDate
+                }).AsQueryable();
 
-            var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            query = ApplyFilters(request.Filters, query);
+            var totalCount = await query.CountAsync(cancellationToken);
 
-            if (movie == null)
+            query = ApplySorting(request.Sort, query);
+            query = ApplyPagination(request.Paging, query);
+            var data = await query.ToListAsync(cancellationToken);
+
+            var queryResult = new QueryResult<MovieResponseModel>
             {
-                throw new NotFoundException($"Movie with Id: {id} does not exist.");
-            }
+                TotalCount = totalCount,
+                Data = data,
+                TotalPages = CountTotalPages(totalCount, request.Paging.PageSize)
+            };
 
-            _context.MovieItems.Remove(movie);
-            await _context.SaveChangesAsync(cancellationToken);
+            return queryResult;
         }
 
         /// <inheritdoc />
@@ -86,37 +99,24 @@ namespace MoviesApi.Dal
                 Description = movie.Description,
                 ReleaseDate = movie.ReleaseDate
             };
-         
+
             return movieDetails;
         }
 
         /// <inheritdoc />
-        public async Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
+        public async Task DeleteMovieAsync(int id, CancellationToken cancellationToken)
         {
-            var query = _context.MovieItems.Select(
-                x => new MovieResponseModel
-                {
-                Id = x.Id,
-                Title = x.Title,
-                Description = x.Description,
-                ReleaseDate = x.ReleaseDate
-            }).AsQueryable();
-            
-            query = ApplyFilters(request.Filters, query);
-            var totalCount = await query.CountAsync(cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
 
-            query = ApplySorting(request.Sort, query);
-            query = ApplyPagination(request.Paging, query);
-            var data = await query.ToListAsync(cancellationToken);
+            var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-            var queryResult = new QueryResult<MovieResponseModel> 
-            { 
-              TotalCount = totalCount,
-              Data = data,
-              TotalPages = totalCount / request.Paging.PageSize 
-            };
-            
-            return queryResult;
+            if (movie == null)
+            {
+                throw new NotFoundException($"Movie with Id: {id} does not exist.");
+            }
+
+            _context.MovieItems.Remove(movie);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         private IQueryable<MovieResponseModel> ApplyFilters(IEnumerable<FilterModel> requestFilters, IQueryable<MovieResponseModel> query)
@@ -184,6 +184,18 @@ namespace MoviesApi.Dal
             movie.Title = requestModel.Title;
             movie.Description = requestModel.Description;
             movie.ReleaseDate = requestModel.ReleaseDate;
+        }
+
+        private int CountTotalPages(int totalCount, int pageSize)
+        {
+            int totalPageCount = totalCount / pageSize;
+
+            if (totalPageCount < 1)
+            {
+                totalPageCount = 1;
+            }
+
+            return totalPageCount;
         }
     }
 }

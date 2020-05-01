@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using MoviesApi.CustomExceptions;
 using MoviesApi.Dal.Contracts;
 using MoviesApi.Models.Movies.Request;
 using MoviesApi.Models.Movies.Response;
@@ -20,7 +19,7 @@ namespace MoviesApi.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly IMovieStore _movieStore;
+        private readonly IMovieService _movieService;
         private readonly IMemoryCache _cache;
         private readonly ILogger _logger;
 
@@ -30,11 +29,41 @@ namespace MoviesApi.Controllers
         /// <param name="movieStore">Provides access to CRUD operations on SecurityProfile</param>                
         /// <param name="cache">Provides access to use memory cache</param>                
         /// <param name="logger">Provides logging services</param> 
-        public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger, IMemoryCache cache)
+        public MoviesController(IMovieService movieStore, ILogger<MoviesController> logger, IMemoryCache cache)
         {
-            _movieStore = movieStore ?? throw new ArgumentNullException(nameof(movieStore));
+            _movieService = movieStore ?? throw new ArgumentNullException(nameof(movieStore));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        /// <summary>
+        /// Create movie action
+        /// </summary>
+        /// <param name="MovieRequestModel">Input parameters for creation of movie wrapped in an object</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>The new movie unique identifier</returns>
+        // POST: api/Movies
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Call made to CreateMovieAsync.");
+            return await _movieService.CreateMovieAsync(request, cancellationToken);
+        }
+
+        /// <summary>
+        /// Update movie action
+        /// </summary>
+        /// <param name="MovieRequestModel">Input parameters for updating the movie  wrapped in an object</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// /// <returns>The task</returns>
+        // PUT: api/Movies/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Call made to UpdateMovieAsync.");
+
+            await _movieService.UpdateMovieAsync(id, request, cancellationToken);
+            return Ok();
         }
 
         /// <summary>
@@ -48,7 +77,7 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult<QueryResult<MovieResponseModel>>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to GetMovieGrid.");
-            return await _movieStore.GetMovieGridAsync(request, cancellationToken);
+            return await _movieService.GetMovieGridAsync(request, cancellationToken);
         }
 
         /// <summary>
@@ -56,7 +85,7 @@ namespace MoviesApi.Controllers
         /// </summary>
         /// <param name="id">The movie unique identifier</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns>Movie details response model</returns>
+        /// <returns>Movie response model</returns>
         // GET: api/Movies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
@@ -64,36 +93,6 @@ namespace MoviesApi.Controllers
             _logger.LogInformation("Call made to GetMovieDetailsAsync");
                
             return await CacheDetailsResponse(id, cancellationToken);
-        }
-
-        /// <summary>
-        /// Create movie action
-        /// </summary>
-        /// <param name="MovieCreateRequestModel">Input parameters for creation of movie wrapped in an object</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns>The new movie unique identifier</returns>
-        // POST: api/Movies
-        [HttpPost]
-        public async Task<ActionResult<int>> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Call made to CreateMovieAsync.");
-            return await _movieStore.CreateMovieAsync(request, cancellationToken);
-        }
-
-        /// <summary>
-        /// Update movie action
-        /// </summary>
-        /// <param name="MovieUpdateRequestModel">Input parameters for updating of movie profile wrapped in an object</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// /// <returns>The task</returns>
-        // PUT: api/Movies/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Call made to UpdateMovieAsync.");
-
-            await _movieStore.UpdateMovieAsync(id, request, cancellationToken);
-            return Ok();
         }
 
         /// <summary>
@@ -108,7 +107,7 @@ namespace MoviesApi.Controllers
         {
             _logger.LogInformation("Call made to DeleteMovieAsync.");
 
-            await _movieStore.DeleteMovieAsync(id, cancellationToken);
+            await _movieService.DeleteMovieAsync(id, cancellationToken);
             return Ok();
         }
 
@@ -117,7 +116,7 @@ namespace MoviesApi.Controllers
             var cashedResponse = await _cache.GetOrCreateAsync<MovieResponseModel>("DetailsResponse", async (cacheEntry) =>
             {
                 cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(1);
-                var response = await _movieStore.GetMovieDetailsAsync(id, cancellationToken);
+                var response = await _movieService.GetMovieDetailsAsync(id, cancellationToken);
                 return response;
             });
 

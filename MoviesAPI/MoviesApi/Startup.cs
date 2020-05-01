@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MoviesApi.Dal;
 using MoviesApi.Dal.Contracts;
+using MoviesApi.Utilities.Extensions;
 
 namespace MoviesApi
 {
@@ -21,13 +23,12 @@ namespace MoviesApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MovieContext>(opt =>
-              opt.UseInMemoryDatabase("MovieList"));
+            services.AddDbContext<MovieContext>(opt => opt.UseInMemoryDatabase("MovieList"));
             services.AddControllers();
             services.AddMemoryCache();
 
             // Add application services.
-            services.AddScoped<IMovieStore, MovieStore>();
+            services.AddScoped<IMovieService, MovieService>();
 
         }
 
@@ -39,7 +40,7 @@ namespace MoviesApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseExceptionHandler("/system/error");
+            app.UseCustomExceptionHandler();
 
             app.UseHttpsRedirection();
 

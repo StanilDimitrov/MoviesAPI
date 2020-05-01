@@ -12,7 +12,7 @@ namespace MoviesApi.Dal.Data.Models
         /// Gets or sets the movie unique identifier.
         /// </summary>
         /// <value>
-        /// The contact movie identifier.
+        /// The movie unique identifier.
         /// </value>
         public int Id { get; set; }
 
