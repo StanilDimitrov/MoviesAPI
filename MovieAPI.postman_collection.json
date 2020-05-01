@@ -15,7 +15,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"NewTestMovieLast\",\n\t\"description\": \"NewTestMoviewDescriptionLast\",\n\t\"releaseDate\": \"2019-05-15\"\n}",
+					"raw": "{\n\t\"title\": \"NewTestMovieLast1\",\n\t\"description\": \"NewTestMoviewDescriptionLast1\",\n\t\"releaseDate\": \"2019-05-15\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -47,7 +47,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"UpdatedMovie4\",\n\t\"description\": \"Moview4UpdateDescription\",\n\t\"releaseDate\": \"2018-05-15\"\n}",
+					"raw": "{\n\t\"title\": \"TestMovie1UpdateTitle22\",\n\t\"description\": \"TestMovie1UpdateDescription22\",\n\t\"releaseDate\": \"2018-05-15\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -55,7 +55,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44305/api/movies/3",
+					"raw": "https://localhost:44305/api/movies/1",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -64,7 +64,7 @@
 					"path": [
 						"api",
 						"movies",
-						"3"
+						"1"
 					]
 				}
 			},
@@ -83,7 +83,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"paging\": { \"currentPage\": 1, \"pageSize\": 5 },\r\n  \"filters\": [\r\n        { \"field\": \"Title\", \"value\": \"TestMovie\" },\r\n        { \"field\": \"ReleaseDate\", \"value\": \"2020\" }\r\n],\r\n  \"sort\": \r\n    { \"field\": \"title\", \"isDescending\": false }\r\n}",
+					"raw": "{\r\n  \"paging\": { \"currentPage\": 1, \"pageSize\": 5 },\r\n  \"filters\": [\r\n        { \"field\": \"title\", \"value\": \"TestMovie\"},\r\n        { \"field\": \"ReleaseDate\", \"value\": \"2019\" }\r\n],\r\n  \"sort\": \r\n    { \"field\": \"Id\", \"isDescending\": false }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,7 +114,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:44305/api/movies/3",
+					"raw": "https://localhost:44305/api/movies/1",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -123,7 +123,7 @@
 					"path": [
 						"api",
 						"movies",
-						"3"
+						"1"
 					]
 				}
 			},
@@ -138,7 +138,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:44305/api/movies/3",
+					"raw": "https://localhost:44305/api/movies/1",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -147,7 +147,7 @@
 					"path": [
 						"api",
 						"movies",
-						"3"
+						"1"
 					]
 				}
 			},
