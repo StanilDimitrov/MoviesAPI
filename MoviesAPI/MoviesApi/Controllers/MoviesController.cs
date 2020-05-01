@@ -30,7 +30,7 @@ namespace MoviesApi.Controllers
         /// <param name="movieStore">Provides access to CRUD operations on SecurityProfile</param>                
         /// <param name="cache">Provides access to use memory cache</param>                
         /// <param name="logger">Provides logging services</param> 
-        public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger, IMemoryCache cache )
+        public MoviesController(IMovieStore movieStore, ILogger<MoviesController> logger, IMemoryCache cache)
         {
             _movieStore = movieStore ?? throw new ArgumentNullException(nameof(movieStore));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
@@ -46,7 +46,7 @@ namespace MoviesApi.Controllers
         // GET: api/Movies
         [HttpGet]
         public async Task<ActionResult<QueryResult<MovieGridResponseModel>>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
-        { 
+        {
             _logger.LogInformation("Call made to GetMovieGrid.");
             return await _movieStore.GetMovieGridAsync(request, cancellationToken);
         }
@@ -61,22 +61,9 @@ namespace MoviesApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDetailsResponseModel>> GetMovieDetailsAsync(int id, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Call made to G" +
-                "etMovieDetailsAsync.");
-
-            try
-            {
-                return await CacheDetailsResponse(id, cancellationToken);
-            }
-            catch (NotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Unexpected exception occured:", ex);
-                throw;
-            }
+            _logger.LogInformation("Call made to GetMovieDetailsAsync");
+               
+            return await CacheDetailsResponse(id, cancellationToken);
         }
 
         /// <summary>
@@ -104,21 +91,9 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult> UpdateMovieAsync(int id, MovieUpdateRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to UpdateMovieAsync.");
-            try
-            {
-                await _movieStore.UpdateMovieAsync(id, request, cancellationToken);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
 
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Unexpected exception occured:", ex);
-                throw;
-            }
+            await _movieStore.UpdateMovieAsync(id, request, cancellationToken);
+            return Ok();
         }
 
         /// <summary>
@@ -132,22 +107,9 @@ namespace MoviesApi.Controllers
         public async Task<ActionResult> DeleteMovieAsync(int id, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to DeleteMovieAsync.");
-            try
-            {
-                await _movieStore.DeleteMovieAsync(id, cancellationToken);
-                return Ok();
 
-            }
-            catch (NotFoundException ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError("Unexpected exception occured:", ex);
-                throw;
-            }
+            await _movieStore.DeleteMovieAsync(id, cancellationToken);
+            return Ok();
         }
 
         private async Task<MovieDetailsResponseModel> CacheDetailsResponse(int id, CancellationToken cancellationToken)

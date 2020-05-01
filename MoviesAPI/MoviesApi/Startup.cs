@@ -39,6 +39,8 @@ namespace MoviesApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandler("/system/error");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
