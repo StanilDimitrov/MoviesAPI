@@ -61,6 +61,8 @@ namespace MoviesApi.Dal
         /// <inheritdoc />
         public async Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
             var query = _context.MovieItems.Select(
                 x => new MovieResponseModel
                 {
@@ -68,7 +70,7 @@ namespace MoviesApi.Dal
                     Title = x.Title,
                     Description = x.Description,
                     ReleaseDate = x.ReleaseDate
-                }).AsQueryable();
+                });
 
             if (request.Filters != null)
             {
