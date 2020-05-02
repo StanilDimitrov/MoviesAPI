@@ -27,7 +27,7 @@ namespace MoviesApi.Utilities
             catch (NotFoundException ex)
             {
                 context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 await context.Response.WriteAsync(ex.Message);
             }
             catch (Exception ex)
