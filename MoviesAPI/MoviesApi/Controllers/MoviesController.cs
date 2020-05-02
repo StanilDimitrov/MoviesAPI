@@ -27,12 +27,12 @@ namespace MoviesApi.Controllers
         /// <summary>
         /// Constructor for MoviesController
         /// </summary>
-        /// <param name="movieStore">Provides access to CRUD operations on SecurityProfile</param>                
+        /// <param name="movieService">Provides access to CRUD operations on SecurityProfile</param>                
         /// <param name="cache">Provides access to use memory cache</param>                
         /// <param name="logger">Provides logging services</param> 
-        public MoviesController(IMovieService movieStore, ILogger<MoviesController> logger, IMemoryCache cache)
+        public MoviesController(IMovieService movieService, ILogger<MoviesController> logger, IMemoryCache cache)
         {
-            _movieService = movieStore ?? throw new ArgumentNullException(nameof(movieStore));
+            _movieService = movieService ?? throw new ArgumentNullException(nameof(movieService));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
