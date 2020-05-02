@@ -77,8 +77,12 @@ namespace MoviesApi.Dal
            
             var totalCount = await query.CountAsync(cancellationToken);
 
-            query = ApplySorting(request.Sort, query);
-            query = ApplyPagination(request.Paging, query);
+            if (request.Sort != null && request.Paging != null)
+            {
+                query = ApplySorting(request.Sort, query);
+                query = ApplyPagination(request.Paging, query);
+            }
+            
             var data = await query.ToListAsync(cancellationToken);
 
             var queryResult = new QueryResult<MovieResponseModel>
