@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MoviesApi.Dal.Contracts;
@@ -44,11 +45,13 @@ namespace MoviesApi.Controllers
         /// <returns>The new movie unique identifier</returns>
         // POST: api/Movies
         [HttpPost]
-        public async Task<ActionResult<int>> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
+        public async Task<ActionResult> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Call made to CreateMovieAsync.");
 
-            return await _movieService.CreateMovieAsync(request, cancellationToken);
+            var id =  await _movieService.CreateMovieAsync(request, cancellationToken);
+
+            return new ObjectResult(id) { StatusCode = StatusCodes.Status201Created };
         }
 
         /// <summary>
