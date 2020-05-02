@@ -33,6 +33,7 @@ namespace MoviesApi.Utilities
             catch(OperationCanceledException)
             {
                 context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await context.Response.WriteAsync("Your submission was canceled.");
             }
             catch (Exception ex)
