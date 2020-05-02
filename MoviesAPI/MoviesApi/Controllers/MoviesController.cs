@@ -42,7 +42,7 @@ namespace MoviesApi.Controllers
         /// </summary>
         /// <param name="request">Input parameters for creation of movie wrapped in an object</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns>The new movie unique identifier</returns>
+        /// <returns>The task</returns>
         // POST: api/Movies
         [HttpPost]
         public async Task<ActionResult> CreateMovieAsync(MovieRequestModel request, CancellationToken cancellationToken)
