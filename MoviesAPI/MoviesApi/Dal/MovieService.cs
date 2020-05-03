@@ -47,19 +47,14 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-            if (movie == null)
-            {
-                throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
-            }
+            var movie = await GetMovieAsync(id, cancellationToken);
 
             SetMovieProperties(movie, request);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<MovieResponseModel>> GetMoviesGridAsync(BasicQuery request, CancellationToken cancellationToken)
         {
             var query = _context.MovieItems.Select(
                 x => new MovieResponseModel
@@ -104,12 +99,7 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-            if (movie == null)
-            {
-                throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
-            }
+            var movie = await GetMovieAsync(id, cancellationToken);
 
             var movieDetails = new MovieResponseModel
             {
@@ -127,6 +117,14 @@ namespace MoviesApi.Dal
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            var movie = await GetMovieAsync(id, cancellationToken);
+
+            _context.MovieItems.Remove(movie);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task<Movie> GetMovieAsync(int id, CancellationToken cancellationToken)
+        {
             var movie = await _context.MovieItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (movie == null)
@@ -134,8 +132,7 @@ namespace MoviesApi.Dal
                 throw new NotFoundException(string.Format(ErrorMessages.MovieNotFound, id));
             }
 
-            _context.MovieItems.Remove(movie);
-            await _context.SaveChangesAsync(cancellationToken);
+            return movie;
         }
 
         private IQueryable<MovieResponseModel> ApplyFilters(IEnumerable<FilterModel> requestFilters, IQueryable<MovieResponseModel> query)

@@ -26,12 +26,12 @@ namespace MoviesApi.Dal.Contracts
         Task UpdateMovieAsync(int id, MovieRequestModel request, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Get movie grid asynchronously.
+        /// Get movies grid asynchronously.
         /// </summary>
         /// <param name="request">The request model.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Query result instance containing total count, total page count and the result set.</returns>
-        Task<QueryResult<MovieResponseModel>> GetMovieGridAsync(BasicQuery request, CancellationToken cancellationToken);
+        Task<QueryResult<MovieResponseModel>> GetMoviesGridAsync(BasicQuery request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get movie details asynchronously.

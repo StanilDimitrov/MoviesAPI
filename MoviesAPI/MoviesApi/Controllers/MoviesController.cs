@@ -82,7 +82,7 @@ namespace MoviesApi.Controllers
         {
             _logger.LogInformation("Call made to GetMovieGridAsync.");
 
-            return await _movieService.GetMovieGridAsync(request, cancellationToken);
+            return await _movieService.GetMoviesGridAsync(request, cancellationToken);
         }
 
         /// <summary>
