@@ -2,7 +2,7 @@
 
 namespace MoviesApi.Utilities.Extensions
 {
-    public static class ExtensionBuilderExtensions
+    public static class ApplicationBuilderExtensions
     {
         public static void UseCustomExceptionHandler(this IApplicationBuilder builder)
         {
